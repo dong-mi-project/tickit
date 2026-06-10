@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"name": "client",
+			"path": "client"
+		},
+		{
+			"name": "server",
+			"path": "server"
+		},
+		{
+			"name": "schema",
+			"path": "schema"
+		},
+		{
+			"name": "root",
+			"path": "."
+		}
+	],
+	"settings": {
+		"launch": {
+			"version": "0.2.0",
+			"configurations": [],
+			"compounds": [
+				{
+					"name": "Full Stack Debug",
+					"configurations": [
+						"Next.js Debug",
+						"Spring Boot Debug"
+					],
+					"presentation": {
+						"hidden": false,
+						"group": "",
+						"order": 1
+					}
+				}
+			]
+		},
+		"java.configuration.updateBuildConfiguration": "automatic"
+	},
+	"extensions": {
+		"recommendations": [
+			"gruntfuggly.todo-tree",
+			"esbenp.prettier-vscode"
+		],
+	}
+}

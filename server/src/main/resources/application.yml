@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: tickit
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+server:
+  address: 0.0.0.0
+  port: 8080
+
