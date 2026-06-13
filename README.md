@@ -98,4 +98,5 @@
     - `Java: Configure Java Runtime`에서 jdk 경로 지정
 
 
-
+## [Server 프로젝트 구성](server/README.md)
+> 해당 문서 참고
