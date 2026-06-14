@@ -4,8 +4,8 @@
   "settings": {
     "width": 2700,
     "height": 2700,
-    "scrollTop": -783.7913,
-    "scrollLeft": -853.8557,
+    "scrollTop": -365.2617,
+    "scrollLeft": -633,
     "zoomLevel": 0.73,
     "show": 495,
     "database": 4,
@@ -70,7 +70,7 @@
     "tableEntities": {
       "HUUqLua_KAhwk2oQ_rob1": {
         "id": "HUUqLua_KAhwk2oQ_rob1",
-        "name": "USERS",
+        "name": "USER",
         "comment": "사용자",
         "columnIds": [
           "6sYvK9LFPQ6vJbWzWiGUZ",
@@ -105,13 +105,13 @@
           "color": "#4CAF50"
         },
         "meta": {
-          "updateAt": 1781093124758,
+          "updateAt": 1781435363586,
           "createAt": 1780930107471
         }
       },
       "KfjpKqdz7zaIxA8gRwo8d": {
         "id": "KfjpKqdz7zaIxA8gRwo8d",
-        "name": "EVENTS",
+        "name": "EVENT",
         "comment": "이벤트 목록",
         "columnIds": [
           "u4PyVRD_1GI5ouXyg0mXh",
@@ -150,13 +150,13 @@
           "color": "#03A9F4"
         },
         "meta": {
-          "updateAt": 1781093117728,
+          "updateAt": 1781435324683,
           "createAt": 1780930107473
         }
       },
       "KIFtEjdgFXon__QChCsAh": {
         "id": "KIFtEjdgFXon__QChCsAh",
-        "name": "CONTACTS",
+        "name": "CONTACT",
         "comment": "문의내역",
         "columnIds": [
           "nqTDzZ3WIuDdHconQjRQD",
@@ -182,13 +182,13 @@
           "color": "#FF5722"
         },
         "meta": {
-          "updateAt": 1781093137100,
+          "updateAt": 1781435330957,
           "createAt": 1780930107473
         }
       },
       "rvOYGF9XPS57JdXtlfM96": {
         "id": "rvOYGF9XPS57JdXtlfM96",
-        "name": "EVENT_SCHEDULES",
+        "name": "EVENT_SCHEDULE",
         "comment": "회차 목록",
         "columnIds": [
           "8boieqM332K-52tU8HFEm",
@@ -221,18 +221,18 @@
           "x": 1500.6337,
           "y": 616.3154,
           "zIndex": 2,
-          "widthName": 105,
+          "widthName": 99,
           "widthComment": 60,
           "color": "#03A9F4"
         },
         "meta": {
-          "updateAt": 1781093309393,
+          "updateAt": 1781435321662,
           "createAt": 1780930107473
         }
       },
       "U_ftvKBQq8ckrmIKgKDeW": {
         "id": "U_ftvKBQq8ckrmIKgKDeW",
-        "name": "EVENT_SEAT_GRADES",
+        "name": "EVENT_SEAT_GRADE",
         "comment": "좌석 등급 정보",
         "columnIds": [
           "DxhBWp1Dd9Qg7Dts8LROl",
@@ -256,18 +256,18 @@
           "x": 2150.789,
           "y": 610.369,
           "zIndex": 2,
-          "widthName": 116,
+          "widthName": 110,
           "widthComment": 81,
           "color": "#03A9F4"
         },
         "meta": {
-          "updateAt": 1781093092079,
+          "updateAt": 1781435371889,
           "createAt": 1780930107474
         }
       },
       "iawRDU0Tp49OJF__fw6bx": {
         "id": "iawRDU0Tp49OJF__fw6bx",
-        "name": "REVIEWS",
+        "name": "REVIEW",
         "comment": "후기",
         "columnIds": [
           "09ADQDas8Quq3JpkLeLs7",
@@ -290,13 +290,13 @@
           "color": "#CDDC39"
         },
         "meta": {
-          "updateAt": 1781093168518,
+          "updateAt": 1781435339317,
           "createAt": 1780930107474
         }
       },
       "hDyQDJo2OWhhWEiVTZt_F": {
         "id": "hDyQDJo2OWhhWEiVTZt_F",
-        "name": "REVIEW_IMGS",
+        "name": "REVIEW_IMG",
         "comment": "후기 이미지",
         "columnIds": [
           "IMcsQYPOGCmiIZEzDbz3k",
@@ -314,18 +314,18 @@
           "x": 40.1771,
           "y": 927.6888,
           "zIndex": 2,
-          "widthName": 77,
+          "widthName": 70,
           "widthComment": 65,
           "color": "#CDDC39"
         },
         "meta": {
-          "updateAt": 1781093170760,
+          "updateAt": 1781435341738,
           "createAt": 1780930107474
         }
       },
       "lAwWsllap8dMwihJCs9fH": {
         "id": "lAwWsllap8dMwihJCs9fH",
-        "name": "TICKETS",
+        "name": "TICKET",
         "comment": "티켓",
         "columnIds": [
           "zkVq54C40dqIzhzaBILzx",
@@ -354,13 +354,13 @@
           "color": "#3F51B5"
         },
         "meta": {
-          "updateAt": 1781093499233,
+          "updateAt": 1781435348109,
           "createAt": 1780930107474
         }
       },
       "fIIu0pjJjnp3z6f53NjV-": {
         "id": "fIIu0pjJjnp3z6f53NjV-",
-        "name": "PAYMENTS",
+        "name": "PAYMENT",
         "comment": "결제 내역",
         "columnIds": [
           "APnYvPVnt5UtaMi5QwPBD",
@@ -387,7 +387,7 @@
           "color": "#673AB7"
         },
         "meta": {
-          "updateAt": 1781093493215,
+          "updateAt": 1781435345607,
           "createAt": 1780930107474
         }
       },
@@ -422,7 +422,7 @@
       },
       "5gUy7DEbQtIPSWGv9O-wj": {
         "id": "5gUy7DEbQtIPSWGv9O-wj",
-        "name": "CONTACT_IMGS",
+        "name": "CONTACT_IMG",
         "comment": "문의 이미지",
         "columnIds": [
           "9orIbPL0I-f4WF_OsWsYV",
@@ -440,18 +440,18 @@
           "x": 31.5789,
           "y": 201.7379,
           "zIndex": 2,
-          "widthName": 87,
+          "widthName": 81,
           "widthComment": 65,
           "color": "#FF5722"
         },
         "meta": {
-          "updateAt": 1781093139980,
+          "updateAt": 1781435333826,
           "createAt": 1780930107475
         }
       },
       "tS2LZGLt3aA8lmup8-UG2": {
         "id": "tS2LZGLt3aA8lmup8-UG2",
-        "name": "PENALTIES",
+        "name": "PENALTIE",
         "comment": "제제내역",
         "columnIds": [
           "CXASHjmikDSmwnsv-HXXZ",
@@ -476,13 +476,13 @@
           "color": "#FF0000"
         },
         "meta": {
-          "updateAt": 1781093161500,
+          "updateAt": 1781435336597,
           "createAt": 1780930107475
         }
       },
       "83ZigB_JlBBvbH_LVPHfm": {
         "id": "83ZigB_JlBBvbH_LVPHfm",
-        "name": "USER_LIKES",
+        "name": "USER_LIKE",
         "comment": "찜한목록",
         "columnIds": [
           "xq-KQvQoFr6OnBjiFR_3_",
@@ -496,12 +496,12 @@
           "x": 969.7401,
           "y": 440.7873,
           "zIndex": 2,
-          "widthName": 63,
+          "widthName": 60,
           "widthComment": 60,
           "color": "#4CAF50"
         },
         "meta": {
-          "updateAt": 1781093128164,
+          "updateAt": 1781435328295,
           "createAt": 1780930107475
         }
       }
@@ -2658,38 +2658,8 @@
         }
       }
     },
-    "indexEntities": {
-      "TD7xnHN8CxsS2OJDnSMop": {
-        "id": "TD7xnHN8CxsS2OJDnSMop",
-        "name": "",
-        "tableId": "5gUy7DEbQtIPSWGv9O-wj",
-        "indexColumnIds": [],
-        "seqIndexColumnIds": [],
-        "unique": false,
-        "meta": {
-          "updateAt": 1780930169223,
-          "createAt": 1780930169223
-        }
-      }
-    },
+    "indexEntities": {},
     "indexColumnEntities": {},
-    "memoEntities": {
-      "EgxfaN8iK28I0EznxKnVY": {
-        "id": "EgxfaN8iK28I0EznxKnVY",
-        "value": "이벤트 관련",
-        "ui": {
-          "x": 2213.7926,
-          "y": 228.7042,
-          "zIndex": 167,
-          "width": 178,
-          "height": 101,
-          "color": ""
-        },
-        "meta": {
-          "updateAt": 1780931201460,
-          "createAt": 1780931165989
-        }
-      }
-    }
+    "memoEntities": {}
   }
 }
