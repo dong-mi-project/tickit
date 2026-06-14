@@ -1,5 +1,5 @@
 package com.dongmi.tickit.domain.example.repository;
 
-public interface ExampleRepository {
+public interface ExampleRepositoryCustom {
 
 }

@@ -1,5 +1,5 @@
 package com.dongmi.tickit.domain.event.repository;
 
-public interface EventRepository {
+public interface EventRepositoryCustom {
 
 }
