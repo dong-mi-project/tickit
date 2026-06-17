@@ -29,9 +29,8 @@ public class CommonControllerAdvice implements ResponseBodyAdvice<Object> {
             ServerHttpResponse response) {
 
         Object returnBody = body;
-        String url = request.getURI().getPath().toString().replace("/sapi", "");
         // 파일 다운로드 등의 경우 Resource 객체를 반환하기 때문에 ApiResponse로 감싸지 않고 그대로 반환하도록 처리
-        if (body instanceof ApiResponse || url.startsWith("/api/") || body instanceof Resource) {
+        if (body instanceof ApiResponse || body instanceof Resource) {
             returnBody = body;
         }
         else if (body != null) {
