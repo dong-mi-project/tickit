@@ -1,10 +1,8 @@
 package com.dongmi.tickit.global.response;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.dongmi.tickit.global.dto.ApiResponse;
 import com.dongmi.tickit.global.exception.CustomException;
