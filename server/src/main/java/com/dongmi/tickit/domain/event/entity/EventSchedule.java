@@ -57,8 +57,6 @@ public class EventSchedule {
 	@Column(nullable = false, unique = true)
 	private Integer roundNo;
 
-	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<EventSeatGrade> seatGrades = new ArrayList<>();
 
 	@Builder
 	public EventSchedule(Event event, LocalDateTime startAt, LocalDateTime endAt, Integer roundNo) {

@@ -29,8 +29,8 @@ public class EventSeatGrade {
     private UUID id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "schedule_id", nullable = false)
-    private EventSchedule schedule;
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -48,8 +48,8 @@ public class EventSeatGrade {
     private Integer price;
 
     @Builder
-    public EventSeatGrade(EventSchedule schedule, String name, Integer sortOrder, Integer total, Integer price) {
-        this.schedule = schedule;
+    public EventSeatGrade(Event event, String name, Integer sortOrder, Integer total, Integer price) {
+        this.event = event;
         this.name = name;
         this.createdAt = LocalDateTime.now();
         this.sortOrder = sortOrder == null ? 0 : sortOrder;

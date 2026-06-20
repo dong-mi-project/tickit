@@ -70,6 +70,9 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<EventSchedule> schedules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<EventSeatGrade> seatGrades = new ArrayList<>();
+
     @Builder
     public Event(UUID userId, String title, String description, LocalDateTime bookStartedAt, LocalDateTime bookEndedAt, String placeName, String placeAddress, Integer maxPerUser) {
         this.userId = userId;
