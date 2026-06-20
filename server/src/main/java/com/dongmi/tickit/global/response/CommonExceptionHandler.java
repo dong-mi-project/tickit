@@ -54,12 +54,12 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = { NoHandlerFoundException.class })
     public ResponseEntity<ApiResponse<?>> handleException(NoHandlerFoundException e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure(e.getMessage(), "NOT_FOUND"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure("not found", "NOT_FOUND"));
     }
     @ExceptionHandler(value = { NoResourceFoundException.class })
     public ResponseEntity<ApiResponse<?>> handleException(NoResourceFoundException e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure(e.getMessage(), "NOT_FOUND"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure("not found", "NOT_FOUND"));
     }
 
     // 405 Method Not Allowed
