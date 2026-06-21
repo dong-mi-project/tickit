@@ -10,13 +10,14 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.dongmi.tickit.global.dto.ApiResponse;
 import com.dongmi.tickit.global.exception.CustomException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.dongmi.tickit")
 public class CommonExceptionHandler {
 
     // 직접 정의한 CustomException을 처리하는 핸들러
@@ -53,7 +54,12 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = { NoHandlerFoundException.class })
     public ResponseEntity<ApiResponse<?>> handleException(NoHandlerFoundException e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure(e.getMessage(), "NOT_FOUND"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure("not found", "NOT_FOUND"));
+    }
+    @ExceptionHandler(value = { NoResourceFoundException.class })
+    public ResponseEntity<ApiResponse<?>> handleException(NoResourceFoundException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.failure("not found", "NOT_FOUND"));
     }
 
     // 405 Method Not Allowed

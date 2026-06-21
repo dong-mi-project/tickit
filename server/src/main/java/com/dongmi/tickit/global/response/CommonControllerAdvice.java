@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.Nullable;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.dongmi.tickit")
 public class CommonControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
