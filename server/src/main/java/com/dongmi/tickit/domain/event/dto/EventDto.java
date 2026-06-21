@@ -1,8 +1,11 @@
 package com.dongmi.tickit.domain.event.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.dongmi.tickit.domain.event.entity.Event;
 import com.dongmi.tickit.domain.event.entity.EventSchedule;
@@ -50,11 +53,11 @@ public class EventDto {
     }
 
     public record CreateEventResponse(
-            String id) {
+            UUID id) {
     }
 
     public record GetEventDetailResponse(
-            String id,
+            UUID id,
             String title,
             String description,
             LocalDateTime createdAt,
@@ -69,7 +72,7 @@ public class EventDto {
             List<EventSeatGradeDetailsResponse> seatGrades) {
         public static GetEventDetailResponse fromEntity(Event event) {
             return new GetEventDetailResponse(
-                    event.getId().toString(),
+                    event.getId(),
                     event.getTitle(),
                     event.getDescription(),
                     event.getCreatedAt(),
@@ -86,7 +89,7 @@ public class EventDto {
     }
 
     public record EventScheduleDetailsResponse(
-            String id,
+            UUID id,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             LocalDateTime deletedAt,
@@ -96,7 +99,7 @@ public class EventDto {
             Integer roundNo) {
         public static EventScheduleDetailsResponse fromEntity(EventSchedule schedule) {
             return new EventScheduleDetailsResponse(
-                    schedule.getId().toString(),
+                    schedule.getId(),
                     schedule.getCreatedAt(),
                     schedule.getUpdatedAt(),
                     schedule.getDeletedAt(),
@@ -108,7 +111,7 @@ public class EventDto {
     }
 
     public record EventSeatGradeDetailsResponse(
-            String id,
+            UUID id,
             String name,
             LocalDateTime createdAt,
             Integer sortOrder,
@@ -116,12 +119,38 @@ public class EventDto {
             Integer price) {
         public static EventSeatGradeDetailsResponse fromEntity(EventSeatGrade seatGrade) {
             return new EventSeatGradeDetailsResponse(
-                    seatGrade.getId().toString(),
+                    seatGrade.getId(),
                     seatGrade.getName(),
                     seatGrade.getCreatedAt(),
                     seatGrade.getSortOrder(),
                     seatGrade.getTotal(),
                     seatGrade.getPrice());
         }
+    }
+
+    public record ListEventRequest(
+        String title,
+        String description,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate startDate,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate endDate,
+        String placeName,
+        String sido,
+        String sigungu
+    ){}
+    public record ListEventResponse(
+            UUID id,
+            String title,
+            String description,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime deletedAt,
+            LocalDateTime bookStartedAt,
+            LocalDateTime bookEndedAt,
+            String placeName,
+            String placeAddress,
+            Integer maxPerUser,
+            LocalDateTime latestScheduleStartAt) {
     }
 }
