@@ -13,9 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dongmi.tickit.domain.event.dto.EventDto;
 import com.dongmi.tickit.domain.event.entity.Event;
-import com.dongmi.tickit.domain.event.entity.QEvent;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
