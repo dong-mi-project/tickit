@@ -81,7 +81,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .fetch();
 
         long total = query.clone()
-        .select(event.id) // count 대신 id만 가볍게 조회
+        .select(event.id)
         .fetch()
         .size();;
         return new PageImpl<>(events, pageable, total);
