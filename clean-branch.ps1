@@ -1,0 +1,1 @@
+git fetch --prune ; git branch -vv | Select-String -Pattern ': gone]' | ForEach-Object { git branch -D $_.ToString().Trim().Split()[0] }
