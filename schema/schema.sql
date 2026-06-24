@@ -55,14 +55,14 @@ CREATE TABLE IF NOT EXISTS `event_schedule` (
 
 CREATE TABLE IF NOT EXISTS `event_seat_grade` (
     `id` BINARY(16) NOT NULL COMMENT '이벤트 좌석 등급 식별자',
-    `schedule_id` BINARY(16) NOT NULL COMMENT '이벤트 회차 식별자',
+    `event_id` BINARY(16) NOT NULL COMMENT '이벤트 식별자',
     `name` VARCHAR(50) NOT NULL COMMENT '좌석 등급 이름',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '좌석 등급 생성일',
     `sort_order` INT NOT NULL DEFAULT 0 COMMENT '좌석 등급 정렬 순서',
     `total` INT NOT NULL COMMENT '좌석 등급 전체 수량',
     `price` INT NOT NULL COMMENT '좌석 등급 가격',
     PRIMARY KEY (`id`),
-    CONSTRAINT `FK_EVENT_SEAT_GRADES_SCHEDULE_ID` FOREIGN KEY (`schedule_id`) REFERENCES `event_schedule` (`id`)
+    CONSTRAINT `FK_EVENT_SEAT_GRADES_EVENT_ID` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '이벤트 좌석 등급';
 
 CREATE TABLE IF NOT EXISTS `review` (
