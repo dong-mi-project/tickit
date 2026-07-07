@@ -1,24 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { sendEmailCode, verifyEmailCode } from "../../api/user";
+import { sendEmailCode, verifyEmailCode, userSignup } from "../../api/user";
 
 function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [inputCode, setInputCode] = useState("");
   const [password, setPassword] = useState("");
-
   const [isSending, setIsSending] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
+  const [inputCode, setInputCode] = useState("");
+
+  // 회원가입 폼으로 보내기 위해서 폼으로 생성
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
 
   // 인증 코드 발송
   const handleSendCode = async () => {
-    if (!email) {
+    if (!form.email) {
       setError("이메일을 입력해주세요.");
       return;
     }
@@ -27,7 +34,7 @@ function SignUpPage() {
     setMessage("");
 
     try {
-      await sendEmailCode(email); // api/user.js에 있는 함수 사용
+      await sendEmailCode(form.email);
       setMessage("인증 코드가 발송되었습니다. 메일함을 확인해주세요.");
     } catch (err) {
       setError("인증 메일 발송에 실패했습니다.");
@@ -47,8 +54,7 @@ function SignUpPage() {
     setMessage("");
 
     try {
-      console.log("이메일:", email, "입력 코드:", inputCode); // 디버깅용 로그
-      const verified = await verifyEmailCode(email, inputCode); // api/user.js에 있는 함수 사용
+      const verified = await verifyEmailCode(form.email, inputCode);
 
       if (verified) {
         setIsVerified(true);
@@ -63,21 +69,46 @@ function SignUpPage() {
     }
   };
 
-  // 최종 회원가입
-  // const handleSignup = async (e) => {
-  //   e.preventDefault();
-  //   if (!isVerified) {
-  //     setError("이메일 인증을 먼저 완료해주세요.");
-  //     return;
-  //   }
+  // 모든 폼에 입력안하면 전송 x
+  const validateForm = () => {
+    if (!form.name) {
+      setError("이름을 입력해주세요.");
+      return false;
+    }
+    if (!form.email) {
+      setError("이메일을 입력해주세요.");
+      return false;
+    }
+    if (!isVerified) {
+      setError("이메일 인증을 먼저 완료해주세요.");
+      return false;
+    }
+    if (!form.password || form.password.length < 8) {
+      setError("비밀번호는 8자리 이상 입력해주세요.");
+      return false;
+    }
+    if (!form.phone) {
+      setError("전화번호를 입력해주세요.");
+      return false;
+    }
+    return true;
+  };
 
-  //   try {
-  //     // await signup(email, password); // api/user.js에 있는 함수 사용
-  //     setMessage("회원가입이 완료되었습니다.");
-  //   } catch (err) {
-  //     setError("회원가입에 실패했습니다.");
-  //   }
-  // };
+  // 회원가입 로직
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    try {
+      await userSignup(form);
+      setMessage("회원가입에 성공하였습니다.");
+      router.push("/login");
+    } catch (err) {
+      console.log("에러 응답:", err.response?.data);
+      setError("회원가입 실패했습니다.");
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 dark:bg-black font-sans p-4">
@@ -86,7 +117,7 @@ function SignUpPage() {
           회원가입
         </h1>
 
-        <form className="flex flex-col gap-5">
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
           {/* 이름 입력란 */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -94,12 +125,14 @@ function SignUpPage() {
             </label>
             <input
               type="text"
+              name="name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="홍길동"
               className="h-12 w-full px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               required
             />
           </div>
-
           {/* 이메일 및 인증번호 입력란 */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -108,8 +141,9 @@ function SignUpPage() {
             <div className="flex gap-2">
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
                 disabled={isVerified}
                 placeholder="example@email.com"
                 className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
@@ -125,15 +159,14 @@ function SignUpPage() {
               </button>
             </div>
           </div>
-
           {/* 인증번호 확인란 (이메일 인증 버튼 클릭 후 활성화되는 영역) */}
           {!isVerified && (
             <div className="flex flex-col gap-1.5">
               <div className="flex gap-2">
                 <input
                   type="text"
-                  value={inputCode}
-                  onChange={(e) => setInputCode(e.target.value)}
+                  value={inputCode} // form.inputCode → inputCode
+                  onChange={(e) => setInputCode(e.target.value)} // setForm 대신 setInputCode
                   placeholder="인증번호 6자리 입력"
                   className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                   required
@@ -149,11 +182,9 @@ function SignUpPage() {
               </div>
             </div>
           )}
-
           {isVerified && (
             <p style={{ color: "green", fontSize: 14 }}>✓ 이메일 인증 완료</p>
           )}
-
           {/* 비밀번호 입력란 */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -161,12 +192,14 @@ function SignUpPage() {
             </label>
             <input
               type="password"
+              name="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="영문, 숫자 포함 8자리 이상"
               className="h-12 w-full px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               required
             />
           </div>
-
           {/* 전화번호 입력란 */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -174,16 +207,21 @@ function SignUpPage() {
             </label>
             <input
               type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
               placeholder="010-1234-5678"
               className="h-12 w-full px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               required
             />
           </div>
+          <p>isVerified 상태: {String(isVerified)}</p>
 
           {/* 가입하기 버튼 */}
           <button
             type="submit"
             disabled={!isVerified}
+            onClick={handleSubmit}
             className="h-12 w-full mt-4 rounded-full bg-black text-white dark:bg-white dark:text-black font-medium transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200"
           >
             동의하고 가입하기
