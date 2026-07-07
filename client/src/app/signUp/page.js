@@ -1,6 +1,84 @@
-import Link from "next/link";
+"use client";
 
-export default function SignUpPage() {
+import Link from "next/link";
+import { useState } from "react";
+import { sendEmailCode, verifyEmailCode } from "../../api/user";
+
+function SignUpPage() {
+  const [email, setEmail] = useState("");
+  const [inputCode, setInputCode] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isSending, setIsSending] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  // 인증 코드 발송
+  const handleSendCode = async () => {
+    if (!email) {
+      setError("이메일을 입력해주세요.");
+      return;
+    }
+    setIsSending(true);
+    setError("");
+    setMessage("");
+
+    try {
+      await sendEmailCode(email); // api/user.js에 있는 함수 사용
+      setMessage("인증 코드가 발송되었습니다. 메일함을 확인해주세요.");
+    } catch (err) {
+      setError("인증 메일 발송에 실패했습니다.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  // 인증 코드 검증
+  const handleVerifyCode = async () => {
+    if (!inputCode) {
+      setError("인증 코드를 입력해주세요.");
+      return;
+    }
+    setIsVerifying(true);
+    setError("");
+    setMessage("");
+
+    try {
+      console.log("이메일:", email, "입력 코드:", inputCode); // 디버깅용 로그
+      const verified = await verifyEmailCode(email, inputCode); // api/user.js에 있는 함수 사용
+
+      if (verified) {
+        setIsVerified(true);
+        setMessage("이메일 인증이 완료되었습니다.");
+      } else {
+        setError("인증 코드가 일치하지 않거나 만료되었습니다.");
+      }
+    } catch (err) {
+      setError("인증 확인 중 오류가 발생했습니다.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  // 최종 회원가입
+  // const handleSignup = async (e) => {
+  //   e.preventDefault();
+  //   if (!isVerified) {
+  //     setError("이메일 인증을 먼저 완료해주세요.");
+  //     return;
+  //   }
+
+  //   try {
+  //     // await signup(email, password); // api/user.js에 있는 함수 사용
+  //     setMessage("회원가입이 완료되었습니다.");
+  //   } catch (err) {
+  //     setError("회원가입에 실패했습니다.");
+  //   }
+  // };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 dark:bg-black font-sans p-4">
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 my-8">
@@ -30,12 +108,17 @@ export default function SignUpPage() {
             <div className="flex gap-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isVerified}
                 placeholder="example@email.com"
                 className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                 required
               />
               <button
                 type="button"
+                onClick={handleSendCode}
+                disabled={isSending || isVerified}
                 className="h-12 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 font-medium text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors whitespace-nowrap"
               >
                 인증 요청
@@ -44,22 +127,32 @@ export default function SignUpPage() {
           </div>
 
           {/* 인증번호 확인란 (이메일 인증 버튼 클릭 후 활성화되는 영역) */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="인증번호 6자리 입력"
-                className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
-                required
-              />
-              <button
-                type="button"
-                className="h-12 px-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
-              >
-                확인
-              </button>
+          {!isVerified && (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={inputCode}
+                  onChange={(e) => setInputCode(e.target.value)}
+                  placeholder="인증번호 6자리 입력"
+                  className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={handleVerifyCode}
+                  disabled={isVerifying}
+                  className="h-12 px-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
+                >
+                  {isVerifying ? "확인 중..." : "확인"}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {isVerified && (
+            <p style={{ color: "green", fontSize: 14 }}>✓ 이메일 인증 완료</p>
+          )}
 
           {/* 비밀번호 입력란 */}
           <div className="flex flex-col gap-1.5">
@@ -90,12 +183,14 @@ export default function SignUpPage() {
           {/* 가입하기 버튼 */}
           <button
             type="submit"
+            disabled={!isVerified}
             className="h-12 w-full mt-4 rounded-full bg-black text-white dark:bg-white dark:text-black font-medium transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200"
           >
             동의하고 가입하기
           </button>
         </form>
-
+        {message && <p style={{ color: "blue", marginTop: 12 }}>{message}</p>}
+        {error && <p style={{ color: "red", marginTop: 12 }}>{error}</p>}
         {/* 하단 로그인 이동 링크 */}
         <div className="flex items-center justify-center gap-2 mt-6 text-sm text-zinc-500 dark:text-zinc-400">
           <span>이미 계정이 있으신가요?</span>
@@ -110,3 +205,5 @@ export default function SignUpPage() {
     </div>
   );
 }
+
+export default SignUpPage;

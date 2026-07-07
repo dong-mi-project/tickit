@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 dark:bg-black font-sans p-4">
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
@@ -64,3 +64,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default LoginPage;
