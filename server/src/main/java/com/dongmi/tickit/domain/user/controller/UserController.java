@@ -52,7 +52,7 @@ public class UserController {
      */
     @Operation(summary = "회원가입", description = "회원가입 메서드")
     @PostMapping("signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody UserDto.SignUpRequest request) {
+    public ResponseEntity<?> signUp(@Valid @RequestBody UserDto.SignUpRequest request) {
         userService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
     }
