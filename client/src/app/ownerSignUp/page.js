@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { verifyOwner, isValidOwner } from "../../api/user";
+import {
+  verifyOwner,
+  isValidOwner,
+  sendEmailCode,
+  verifyEmailCode,
+  userSignup,
+} from "../../api/user";
 
 function OwnerSignUpPage() {
   const [password, setPassword] = useState("");
@@ -14,6 +20,7 @@ function OwnerSignUpPage() {
   const [error, setError] = useState("");
   const router = useRouter();
   const [inputCode, setInputCode] = useState("");
+  const [isOwnerCode, setIsOwnerCode] = useState(""); // 추가: isOwnerCode 상태 추가
 
   // 회원가입 폼으로 보내기 위해서 폼으로 생성
   const [form, setForm] = useState({
@@ -21,6 +28,7 @@ function OwnerSignUpPage() {
     email: "",
     password: "",
     phone: "",
+    accountType: "B",
   });
 
   // 인증 코드 발송
@@ -44,26 +52,22 @@ function OwnerSignUpPage() {
   };
 
   const handleVerify = async () => {
-    if (!inputCode) {
+    if (!isOwnerCode) {
       setError("사업자 번호를 입력해주세요.");
       return;
     }
-    setIsVerifying(true);
     setError("");
     setMessage("");
     try {
-      const res = await verifyOwner(inputCode);
+      const res = await verifyOwner(isOwnerCode);
 
       if (isValidOwner(res.data)) {
-        setIsVerified(true);
         alert("유효한 사업자번호입니다.");
       } else {
         alert("존재하지 않는 사업자번호입니다.");
       }
     } catch (err) {
       console.error("에러 발생:", err);
-    } finally {
-      setIsVerifying(false);
     }
   };
 
@@ -78,11 +82,11 @@ function OwnerSignUpPage() {
     setMessage("");
 
     try {
-      const verified = await verifyOwner(inputCode);
+      const verified = await verifyEmailCode(form.email, inputCode);
 
       if (verified) {
         setIsVerified(true);
-        setMessage("사업자 인증이 완료되었습니다.");
+        setMessage("이메일 인증이 완료되었습니다.");
       } else {
         setError("인증 코드가 일치하지 않거나 만료되었습니다.");
       }
@@ -157,6 +161,32 @@ function OwnerSignUpPage() {
               required
             />
           </div>
+          {/* 사업자 번호 입력란 */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              사업자 번호
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={isOwnerCode} // form.inputCode → inputCode
+                onChange={(e) => setIsOwnerCode(e.target.value)} // setForm 대신 setsOwnerCode
+                placeholder="인증번호 6자리 입력"
+                className="h-12 flex-1 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                required
+              />
+              <button
+                type="button"
+                onClick={handleVerify}
+                className="h-12 px-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
+              >
+                확인
+              </button>
+            </div>
+          </div>
+          {isVerified && (
+            <p style={{ color: "green", fontSize: 14 }}>✓ 사업자 인증 완료</p>
+          )}
           {/* 이메일 및 인증번호 입력란 */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -197,7 +227,7 @@ function OwnerSignUpPage() {
                 />
                 <button
                   type="button"
-                  onClick={handleVerify}
+                  onClick={handleVerifyCode}
                   disabled={isVerifying}
                   className="h-12 px-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap"
                 >
@@ -207,7 +237,7 @@ function OwnerSignUpPage() {
             </div>
           )}
           {isVerified && (
-            <p style={{ color: "green", fontSize: 14 }}>✓ 사업자 인증 완료</p>
+            <p style={{ color: "green", fontSize: 14 }}>✓ 이메일 인증 완료</p>
           )}
           {/* 비밀번호 입력란 */}
           <div className="flex flex-col gap-1.5">

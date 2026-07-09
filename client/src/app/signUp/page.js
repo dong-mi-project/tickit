@@ -21,6 +21,7 @@ function SignUpPage() {
     email: "",
     password: "",
     phone: "",
+    accountType: "U",
   });
 
   // 인증 코드 발송
