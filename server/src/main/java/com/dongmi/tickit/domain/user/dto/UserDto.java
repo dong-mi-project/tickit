@@ -2,6 +2,7 @@ package com.dongmi.tickit.domain.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
 // 예시 DTO입니다. 실제로는 도메인에 맞게 DTO를 작성해야 합니다.
 public class UserDto {
@@ -29,4 +30,23 @@ public class UserDto {
             String accountType,
             String message
     ) {}
+
+    // 비밀 번호 찾기 DTO
+    public record FindPasswordRequest(
+        String name,
+        String phone,
+        String email
+    ){}
+
+    // 검증 DTO
+    public record VerifyCodeRequest (
+        String email,
+        String code
+    ){}
+
+    // 리셋 비밀 번호 DTO
+    public record ResetPasswordRequest (
+        String resetToken,
+        String newPassword
+    ){}
 }

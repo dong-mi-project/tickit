@@ -66,4 +66,34 @@ public class UserController {
         UserDto.LoginResponse response = userService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    // 아이디 찾는 메서드
+    @Operation(summary = "아이디 찾기", description = "아이디 찾는 메서드")
+    @PostMapping("findId")
+    public ResponseEntity<String> findMyEmail(@RequestParam String name,
+                         String phone) {
+        String email = userService.findMyEmail(name, phone);
+        return ResponseEntity.ok(email);
+    }
+
+    @Operation(summary = "비밀번호 찾기 - 인증코드 발송", description = "이름/전화번호/이메일 확인 후 인증코드 발송")
+    @PostMapping("/find")
+    public ResponseEntity<Void> sendVerificationCode(@Valid @RequestBody UserDto.FindPasswordRequest request) {
+        userService.sendVerificationCode(request.name(), request.phone(), request.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "인증코드 확인", description = "인증코드 검증 후 재설정 토큰 발급")
+    @PostMapping("/verify-code")
+    public ResponseEntity<String> verifyCode(@Valid @RequestBody UserDto.VerifyCodeRequest request) {
+        String resetToken = userService.verifyCodeAndIssueToken(request.email(), request.code());
+        return ResponseEntity.ok(resetToken);
+    }
+
+    @Operation(summary = "비밀번호 재설정", description = "토큰 검증 후 새 비밀번호로 변경")
+    @PatchMapping("/reset")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody UserDto.ResetPasswordRequest request) {
+        userService.resetPassword(request.resetToken(), request.newPassword());
+        return ResponseEntity.ok().build();
+    }
 }
