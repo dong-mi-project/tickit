@@ -41,7 +41,15 @@ export const verifyOwner = (b_no = "") => {
   );
 };
 
+// 사업자 검증
 export const isValidOwner = (responseData) => {
   const result = responseData?.data?.[0];
   return !!result && result.b_stt_cd !== "";
+};
+
+// 유저 아이디 찾기
+export const findUserId = (name, email) => {
+  return axios.get(`${BASE_URL}/user/findId`, {
+    params: { name, email },
+  });
 };
