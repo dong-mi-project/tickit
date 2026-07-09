@@ -26,6 +26,7 @@ public class UserDto {
             String id,
             String email,
             String name,
+            String accountType,
             String message
     ) {}
 }

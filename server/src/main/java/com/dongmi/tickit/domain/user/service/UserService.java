@@ -186,6 +186,7 @@ public class UserService {
                 user.getId().toString(),
                 user.getEmail(),
                 user.getName(),
+                user.getAccountType(),
                 "로그인 성공"
         );
     }
