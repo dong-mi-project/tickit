@@ -48,8 +48,8 @@ export const isValidOwner = (responseData) => {
 };
 
 // 유저 아이디 찾기
-export const findUserId = (name, email) => {
+export const findUserId = (name, phone) => {
   return axios.get(`${BASE_URL}/user/findId`, {
-    params: { name, email },
+    params: { name, phone },
   });
 };
