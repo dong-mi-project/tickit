@@ -32,7 +32,9 @@
     "src/app/page.js",
     "src/app/login/page.js",
     "src/app/signUp/page.js",
-    "src/app/ownerSignUp/page.js"
+    "src/app/ownerSignUp/page.js",
+    "src/app/findId/page.js",
+    "src/app/findPassword/page.js"
   ],
   "exclude": ["node_modules"]
 }

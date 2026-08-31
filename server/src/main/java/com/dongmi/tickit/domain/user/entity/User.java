@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -60,5 +61,9 @@ public class User {
         this.accountType = accountType != null ? accountType : "U"; // 기본값 방어 코드
         this.phone = phone;
         this.profileImg = profileImg;
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
     }
 }

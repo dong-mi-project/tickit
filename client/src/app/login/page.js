@@ -93,7 +93,14 @@ function LoginPage() {
         {/* 하단 링크 영역 (비밀번호 찾기 | 회원가입) */}
         <div className="flex items-center justify-center gap-4 mt-6 text-sm text-zinc-500 dark:text-zinc-400">
           <Link
-            href="/find-password"
+            href="/findId"
+            className="hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+          >
+            아이디 찾기
+          </Link>
+          <span className="w-px h-3 bg-zinc-200 dark:bg-zinc-700" />
+          <Link
+            href="/findPassword"
             className="hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
           >
             비밀번호 찾기

@@ -21,10 +21,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Random;
+import java.util.UUID;
 
 // 예시 서비스입니다. 실제로는 도메인에 맞게 서비스를 작성해야 합니다.
 @Service
@@ -37,6 +39,10 @@ public class UserService {
 
     private final JavaMailSender mailSender;
     private final RedisTemplate<String, String> redisTemplate;
+
+    private final PasswordEncoder passwordEncoder;
+    private static final String CODE_PREFIX = "pw-reset:code:";
+    private static final String TOKEN_PREFIX = "pw-reset:token:";
 
     // 인증 코드 생성 + 메일 발송 + Redis 저장
     public String sendLoginAuthMessage(String to) throws Exception {
@@ -189,5 +195,71 @@ public class UserService {
                 user.getAccountType(),
                 "로그인 성공"
         );
+    }
+
+    // 이메일 찾기
+    public String findMyEmail(String name, String phone){
+        User user = userRepository.findByNameAndPhone(name, phone)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일이거나 비밀번호가 틀렸습니다."));
+
+        return user.getEmail();
+    }
+
+    // 비밀번호 로직
+    // 1단계: 본인 확인 + 인증코드 발송
+    public void sendVerificationCode(String name, String phone, String email) {
+        userRepository.findByNameAndPhoneAndEmail(name, phone, email)
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 회원 정보가 없습니다."));
+
+        String code = createRandomCode();
+
+        redisTemplate.opsForValue().set(
+                CODE_PREFIX + email,
+                code,
+                Duration.ofMinutes(5)
+        );
+
+        verifyEmailCode(email, code); // 기존 로직 재사용
+    }
+
+    // 2단계: 인증코드 확인 → 재설정 토큰 발급
+    public String verifyCodeAndIssueToken(String email, String code) {
+        String savedCode = redisTemplate.opsForValue().get(CODE_PREFIX + email);
+
+        if (savedCode == null || !savedCode.equals(code)) {
+            throw new IllegalArgumentException("인증코드가 일치하지 않거나 만료되었습니다.");
+        }
+
+        redisTemplate.delete(CODE_PREFIX + email);
+
+        String resetToken = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(
+                TOKEN_PREFIX + resetToken,
+                email,
+                Duration.ofMinutes(10)
+        );
+
+        return resetToken;
+    }
+
+    // 3단계: 토큰 검증 후 비밀번호 변경
+    @Transactional
+    public void resetPassword(String resetToken, String newPassword) {
+        String email = redisTemplate.opsForValue().get(TOKEN_PREFIX + resetToken);
+
+        if (email == null) {
+            throw new IllegalArgumentException("유효하지 않거나 만료된 요청입니다.");
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        user.changePassword(passwordEncoder.encode(newPassword));
+
+        redisTemplate.delete(TOKEN_PREFIX + resetToken);
+    }
+
+    private String createRandomCode() {
+        return String.valueOf((int) (Math.random() * 900000) + 100000); // 6자리 숫자
     }
 }
